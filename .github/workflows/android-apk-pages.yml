@@ -41,7 +41,10 @@ jobs:
           [[ "$SOURCE_URL" == https://* ]]
           mkdir public
           status=$(curl --fail --silent --show-error --retry 2 --max-time 180 \
+            --location --max-redirs 3 --proto-redir '=https' \
+            --user-agent 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36' \
             --proto '=https' --output public/sharenavi.apk --write-out '%{http_code}' "$SOURCE_URL")
+          echo "APK source final HTTP status: $status"
           [[ "$status" == 200 ]]
           printf '%s  %s\n' "$SHA256" public/sharenavi.apk | sha256sum --check -
           printf '%s  sharenavi.apk\n' "$SHA256" > public/sharenavi.apk.sha256
