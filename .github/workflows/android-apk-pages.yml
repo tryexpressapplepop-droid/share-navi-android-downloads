@@ -41,12 +41,13 @@ jobs:
           [[ "$SOURCE_URL" == https://* ]]
           mkdir public
           status=$(curl --fail --silent --show-error --retry 2 --max-time 180 \
-            --proto '=https' --output "public/$FILENAME" --write-out '%{http_code}' "$SOURCE_URL")
+            --proto '=https' --output public/sharenavi.apk --write-out '%{http_code}' "$SOURCE_URL")
           [[ "$status" == 200 ]]
-          printf '%s  %s\n' "$SHA256" "public/$FILENAME" | sha256sum --check -
-          printf '%s  %s\n' "$SHA256" "$FILENAME" > "public/$FILENAME.sha256"
+          printf '%s  %s\n' "$SHA256" public/sharenavi.apk | sha256sum --check -
+          printf '%s  sharenavi.apk\n' "$SHA256" > public/sharenavi.apk.sha256
+          printf '{"filename":"%s","sha256":"%s","signing":"test","realDeviceVerified":false}\n' "$FILENAME" "$SHA256" > public/release.json
           printf '%s\n' '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>シェアナビくん Android検証版</title><style>body{font:16px sans-serif;max-width:44rem;margin:3rem auto;padding:1.5rem;line-height:1.8}a{display:block;padding:1rem;background:#126b60;color:white;text-align:center;text-decoration:none;border-radius:.5rem}code{overflow-wrap:anywhere}</style><h1>シェアナビくん Android検証版</h1><p>新規アプリの機能検証版です。テスト署名を使用しています。実機インストール・動作確認済みという意味ではありません。正式アイコンは原本未入手のため未適用です。</p>' > public/index.html
-          printf '<a download href="%s">%s をダウンロード</a><p>SHA256: <code>%s</code></p><p>受信には共有APIサーバーの稼働が必要です。開発用サーバーの継続稼働は保証されません。運転中は操作しないでください。ナビは利用者がボタンを押したときだけ開きます。</p></html>\n' "$FILENAME" "$FILENAME" "$SHA256" >> public/index.html
+          printf '<a download="%s" href="sharenavi.apk">%s をダウンロード</a><p>SHA256: <code>%s</code></p><p>受信には共有APIサーバーの稼働が必要です。開発用サーバーの継続稼働は保証されません。運転中は操作しないでください。ナビは利用者がボタンを押したときだけ開きます。</p></html>\n' "$FILENAME" "$FILENAME" "$SHA256" >> public/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
