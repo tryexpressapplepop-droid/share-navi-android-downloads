@@ -50,7 +50,7 @@ jobs:
           printf '%s  sharenavi.apk\n' "$SHA256" > public/sharenavi.apk.sha256
           printf '{"filename":"%s","sha256":"%s","signing":"test","realDeviceVerified":false}\n' "$FILENAME" "$SHA256" > public/release.json
           printf '%s\n' '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>シェアナビくん Android検証版</title><style>body{font:16px sans-serif;max-width:44rem;margin:3rem auto;padding:1.5rem;line-height:1.8}a{display:block;padding:1rem;background:#126b60;color:white;text-align:center;text-decoration:none;border-radius:.5rem}code{overflow-wrap:anywhere}</style><h1>シェアナビくん Android検証版</h1><p>新規アプリの機能検証版です。テスト署名を使用しています。実機インストール・動作確認済みという意味ではありません。正式アイコンは原本未入手のため未適用です。</p>' > public/index.html
-          printf '<a download="%s" href="sharenavi.apk">%s をダウンロード</a><p>SHA256: <code>%s</code></p><p>受信には本番共有APIサーバーへの通信が必要です。このAPKの実機でのQR読み取り・常時受信・通知・ナビ起動は未検証です。配達NAVITIMEへの直接目的地設定は未実装です。確認した住所をコピーして通常起動し、アプリ内で住所検索・地点確認をしてください。短縮URLや地図中心を目的地として渡しません。運転中は操作しないでください。ナビは利用者の操作で開始してください。</p></html>\n' "$FILENAME" "$FILENAME" "$SHA256" >> public/index.html
+          printf '<a download="%s" href="sharenavi.apk">%s をダウンロード</a><p>SHA256: <code>%s</code></p><p>履歴カード全体から目的地詳細を前面に開く修正を含みます。実機での修正効果は未確認です。</p><p>受信には本番共有APIサーバーへの通信が必要です。このAPKの実機でのQR読み取り・常時受信・通知・ナビ起動は未検証です。配達NAVITIMEへの直接目的地設定は未実装です。確認した住所をコピーして通常起動し、アプリ内で住所検索・地点確認をしてください。短縮URLや地図中心を目的地として渡しません。運転中は操作しないでください。ナビは利用者の操作で開始してください。</p></html>\n' "$FILENAME" "$FILENAME" "$SHA256" >> public/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
